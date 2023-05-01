@@ -64,59 +64,56 @@ class PageShoping extends StatelessWidget {
                   child: Text(controller.homeDatas.message.toString()),
                 );
               case Status.isComplete:
-                return Expanded(
-                  flex: 1,
-                  child: GridView.builder(
-                    itemCount:  controller.homeDatas.data!.products!.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 7),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 5,
-                      crossAxisSpacing: 5,
-                      childAspectRatio: 1 / .6,
-                    ),
-                    itemBuilder: (context, i) {
-                      return GestureDetector(
-                        onTap: () {
-                          controller.viewProductPage(context, controller.homeDatas.data!.products![i]);
-                        },
-                        child: Card(
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: FadeInImage.assetNetwork(
-                                  placeholder: HomeImages.logo,
-                                  placeholderFit: BoxFit.fill,
-                                  imageErrorBuilder: (BuildContext context,
-                                          Object error, _) =>
-                                      Container(
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(HomeImages.logo),
-                                      ),
-                                    ),
-                                  ),height: 80,
-                                  alignment: Alignment.center,
-                                  image:     controller.homeDatas.data!.products![i].thumbnail!,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),const SizedBox(height: 5),
-                              Text(    controller.homeDatas.data!.products![i].title!
-                              ,
-                                style: KStyle.content(),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+                return GridView.builder(
+                  itemCount:  controller.homeDatas.data!.products!.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 7),
+                  gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 5,
+                    crossAxisSpacing: 5,
+                    childAspectRatio: 1 / .65,
                   ),
+                  itemBuilder: (context, i) {
+                    return GestureDetector(
+                      onTap: () {
+                        controller.viewProductPage(context, controller.homeDatas.data!.products![i]);
+                      },
+                      child: Card(
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: FadeInImage.assetNetwork(
+                                placeholder: HomeImages.logo,
+                                placeholderFit: BoxFit.fill,
+                                imageErrorBuilder: (BuildContext context,
+                                        Object error, _) =>
+                                    Container(
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(HomeImages.logo),
+                                    ),
+                                  ),
+                                ),height: 80,
+                                alignment: Alignment.center,
+                                image:     controller.homeDatas.data!.products![i].thumbnail!,
+                                fit: BoxFit.fill,
+                              ),
+                            ),const SizedBox(height: 5),
+                            Text(    controller.homeDatas.data!.products![i].title!
+                            ,
+                              style: KStyle.content(),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 );
             }
             return Container();

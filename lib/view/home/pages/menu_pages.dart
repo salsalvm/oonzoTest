@@ -10,23 +10,10 @@ class PageMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController authController = Get.put(AuthController());
     return Center(
-      child: Obx(
-        () => ActionButton(
-          color: const Color(0xffFFC238),
-          radius: 5,
-          onTap: () {
-            authController.signOut(context);
-          },
-          child:
-              authController.loading.value || authController.signUploading.value
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                      color: kWhite,
-                    ))
-                  : Text('Sign Out', style: KStyle.title(color: kWhite)),
-        ),
+      child: Text(
+        'menu',
+        style: KStyle.title(color: kWarnning),
       ),
     );
   }
