@@ -39,14 +39,16 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: Scaffold(
-        appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(56),
-            child: AuthAppBar(title: KString.signup)),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(30),
-            child: ListView(
+      child: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) => Scaffold(
+          appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(56),
+              child: AuthAppBar(title: KString.signup)),
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(30),
+              child: ListView(
                 children: [
                   const SizedBox(height: 130),
                   Card(
@@ -129,19 +131,20 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Obx(() => ActionButton(
+                   ActionButton(
                         color: kWarnning,
                         onTap: () {
                           signUpButtonPressed(context);
                         },
                         radius: 5,
-                        child:  Text(KString.registerButton,
-                                style: KStyle.title(color: kWhite)),
-                      ))
+                        child: Text(KString.registerButton,
+                            style: KStyle.title(color: kWhite)),
+                      )
                 ],
               ),
             ),
           ),
+        ),
       ),
     );
   }
@@ -154,8 +157,7 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
     if (mail.isEmpty || pass.isEmpty || name.isEmpty) {
       KUtils.snackMessage(context, message: 'Fill the field', color: kError);
       return;
-    } else {
-    
+    } else if (GetUtils.isEmail(mail)) {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: mail, password: pass)
           .then((value) async {
@@ -171,7 +173,14 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
             context, KRoutesName.home, (Route<dynamic> route) => false);
         KUtils.snackMessage(context,
             message: 'Registration SuccesFully', color: kSuccess);
+      }).onError((error, _) {
+        print(error);
+        KUtils.snackMessage(context,
+            message: 'user already exist', color: kError);
       });
+    } else {
+      KUtils.snackMessage(context,
+          message: 'email formate is incorect', color: kError);
     }
   }
 }

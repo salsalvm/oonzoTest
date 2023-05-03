@@ -22,6 +22,7 @@ class ScreenHome extends StatelessWidget {
               preferredSize:
                   Size.fromHeight(indexChangerNavigator.value == 0 ? 120 : 56),
               child: MainAppBar(
+                onTap: () {},
                 bottomVisible: indexChangerNavigator.value == 0 ? true : false,
               )),
           body: SafeArea(

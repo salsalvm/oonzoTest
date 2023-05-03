@@ -15,9 +15,11 @@ class ScreenProduct extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
     return Scaffold(
-      appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(56),
-          child: MainAppBar(bottomVisible: false)),
+      appBar:  PreferredSize(
+          preferredSize:const  Size.fromHeight(56),
+          child: MainAppBar(bottomVisible: false,onTap: () {
+            Navigator.pop(context);
+          },)),
       body: SafeArea(
         child: Obx(
           () => ListView(

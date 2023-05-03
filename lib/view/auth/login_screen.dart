@@ -45,99 +45,98 @@ class _ScreenLoginState extends State<ScreenLogin> {
         appBar: const PreferredSize(
             preferredSize: Size.fromHeight(56),
             child: AuthAppBar(title: KString.login)),
-        body:  SafeArea(
-            child: StreamBuilder(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) => Padding(
-                padding: const EdgeInsets.all(30),
-                child: ListView(
-                  children: [
-                    const SizedBox(height: 130),
-                    Card(
-                      elevation: 10,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CustomFormfield(
-                            name: KString.emailFormField,
-                            controller: mailController,
-                            validator: (mail) {
-                              if (!GetUtils.isEmail(mail!)) {
-                                return KString.errorMail;
-                              }
-                              if (mail.toString().isEmpty) {
-                                return KString.errorEmptyMail;
-                              }
-                              return null;
-                            },
-                            prefix: const Icon(Icons.mail),
-                          ),
-                          const Divider(),
-                          CustomFormfield(
-                            obscureText: true,
-                            name: KString.passwordFormField,
-                            controller: passwordController,
-                            validator: (pass) {
-                              if (pass.toString().length < 6) {
-                                return KString.errorPassword;
-                              }
-                              if (pass.toString().isEmpty) {
-                                return KString.errorEmptyPassword;
-                              }
-                              return null;
-                            },
-                            prefix: const Icon(Icons.password),
-                          ),
-                        ],
+        body: SafeArea(
+          child: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) => Padding(
+              padding: const EdgeInsets.all(30),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 130),
+                  Card(
+                    elevation: 10,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CustomFormfield(
+                          name: KString.emailFormField,
+                          controller: mailController,
+                          validator: (mail) {
+                            if (!GetUtils.isEmail(mail!)) {
+                              return KString.errorMail;
+                            }
+                            if (mail.toString().isEmpty) {
+                              return KString.errorEmptyMail;
+                            }
+                            return null;
+                          },
+                          prefix: const Icon(Icons.mail),
+                        ),
+                        const Divider(),
+                        CustomFormfield(
+                          obscureText: true,
+                          name: KString.passwordFormField,
+                          controller: passwordController,
+                          validator: (pass) {
+                            if (pass.toString().length < 6) {
+                              return KString.errorPassword;
+                            }
+                            if (pass.toString().isEmpty) {
+                              return KString.errorEmptyPassword;
+                            }
+                            return null;
+                          },
+                          prefix: const Icon(Icons.password),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Checkbox(value: true, onChanged: (value) {}),
+                      Text(KString.rememberMe, style: KStyle.title()),
+                      const SizedBox(
+                        height: 30,
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Checkbox(value: true, onChanged: (value) {}),
-                        Text(KString.rememberMe, style: KStyle.title()),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Text(KString.forgotPass,
-                            style: KStyle.title(
-                              decoration: TextDecoration.underline,
-                              color: kWarnning,
-                            ))
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(KString.cNoAccount),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                KRoutesName.signup,
-                                (Route<dynamic> route) => false);
-                          },
-                          child: Text(KString.signup, style: KStyle.title()),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                 ActionButton(
-                          color: kWarnning,
-                          radius: 5,
-                          onTap: () {
-                            loginPressed(context);
-                          },
-                          child: Text(KString.submit,
-                                  style: KStyle.title(color: kWhite)),
-                        )
-                  ],
-                ),
+                      Text(KString.forgotPass,
+                          style: KStyle.title(
+                            decoration: TextDecoration.underline,
+                            color: kWarnning,
+                          ))
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(KString.cNoAccount),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              KRoutesName.signup,
+                              (Route<dynamic> route) => false);
+                        },
+                        child: Text(KString.signup, style: KStyle.title()),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  ActionButton(
+                    color: kWarnning,
+                    radius: 5,
+                    onTap: () {
+                      loginPressed(context);
+                    },
+                    child: Text(KString.submit,
+                        style: KStyle.title(color: kWhite)),
+                  )
+                ],
               ),
             ),
-          
+          ),
         ),
       ),
     );
@@ -150,10 +149,10 @@ class _ScreenLoginState extends State<ScreenLogin> {
     if (mail.isEmpty || pass.isEmpty) {
       KUtils.snackMessage(ctx, message: 'Fill the field', color: kError);
       return;
-    } else {
-      
-       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: mail, password: pass).then((value) async {
+    } else if (GetUtils.isEmail(mail)) {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: mail, password: pass)
+          .then((value) async {
         final SharedPreferences sharedPref =
             await SharedPreferences.getInstance();
 
@@ -167,12 +166,14 @@ class _ScreenLoginState extends State<ScreenLogin> {
         Navigator.pushNamedAndRemoveUntil(
             context, KRoutesName.home, (Route<dynamic> route) => false);
       }).onError((error, stackTrace) {
-
-        KUtils.snackMessage(context, message: 'entered mail and password is incorrect', color: kError);
+        print(error);
+        KUtils.snackMessage(context,
+            message: 'entered mail and password is incorrect', color: kError);
       });
-
+    }else{
+       KUtils.snackMessage(context,
+            message: 'email formate is incorect', color: kError);
      
     }
   }
-
 }

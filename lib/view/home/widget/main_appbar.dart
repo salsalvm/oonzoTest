@@ -1,3 +1,4 @@
+
 import 'package:firstcry/res/asset/home_images.dart';
 import 'package:firstcry/res/colors.dart';
 import 'package:firstcry/res/styles.dart';
@@ -6,9 +7,9 @@ import 'package:flutter/material.dart';
 class MainAppBar extends StatelessWidget {
   const MainAppBar({
     Key? key,
-    required this.bottomVisible,
+    required this.bottomVisible,required this.onTap,
   }) : super(key: key);
-  final bool bottomVisible;
+  final bool bottomVisible;final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
     List<IconData> icon = <IconData>[
@@ -20,11 +21,14 @@ class MainAppBar extends StatelessWidget {
       padding: const EdgeInsets.only(top: 5),
       child: AppBar(
         leadingWidth: 90,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Container(
-            decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage(HomeImages.logo))),
+        leading: GestureDetector(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Container(
+              decoration: const BoxDecoration(
+                  image: DecorationImage(image: AssetImage(HomeImages.logo))),
+            ),
           ),
         ),
         actions: List.generate(
