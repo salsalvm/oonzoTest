@@ -13,15 +13,14 @@ class PageProfile extends StatelessWidget {
     final AuthController authController = Get.put(AuthController());
 
     return Center(
-      child:ActionButton(
-          color: const Color(0xffFFC238),
-          radius: 5,
-          onTap: () {
-            authController.signOut(context);
-          },
-          child: Text('Sign Out', style: KStyle.title(color: kWhite)),
-        ),
-      
+      child: ActionButton(
+        color: const Color(0xffFFC238),
+        radius: 5,
+        onTap: () {
+          authController.signOut(context);
+        },
+        child: Text('Sign Out', style: KStyle.title(color: kWhite)),
+      ),
     );
   }
 }

@@ -34,13 +34,10 @@ class HomeController extends GetxController {
     update();
   }
 
-
-Rx<Product>? product;
-
+  Rx<Product>? product;
 
   void viewProductPage(BuildContext context, Product product) {
     Navigator.pushNamed(context, KRoutesName.product);
-this.product=product.obs;
-
+    this.product = product.obs;
   }
 }

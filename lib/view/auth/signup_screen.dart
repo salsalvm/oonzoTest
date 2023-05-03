@@ -19,8 +19,10 @@ class ScreenSignUp extends StatefulWidget {
 
 class _ScreenSignUpState extends State<ScreenSignUp> {
   final AuthController authController = Get.find<AuthController>();
+  TextEditingController nameController = TextEditingController();
   TextEditingController mailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   @override
   void dispose() {
     mailController.dispose();
@@ -41,87 +43,119 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(30),
-            child: ListView(
-              children: [
-                const SizedBox(height: 130),
-                Card(
-                  elevation: 10,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomFormfield(
-                          name: KString.emailFormField,
-                          controller: mailController,
-                          validator: (mail) {
-                            if (!GetUtils.isEmail(mail!)) {
-                              return KString.errorEmptyMail;
+            child: GetBuilder<AuthController>(init: AuthController(),
+      builder: (AuthController controller) => ListView(
+                children: [
+                  const SizedBox(height: 130),
+                  Card(
+                    elevation: 10,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomFormfield(
+                          name: KString.userFormField,
+                          prefix: const Icon(Icons.person),
+                          controller: nameController,
+                          validator: (name) {
+                            if (!GetUtils.isUsername(name!)) {
+                              return KString.errorName;
                             }
-                            if (mail.toString().isEmpty) {
-                              return KString.errorMail;
+                            if (name.toString().isEmpty) {
+                              return KString.errorEmptyName;
                             }
                             return null;
                           },
-                          prefix: const Icon(Icons.mail)),
-                      const Divider(),
-                      CustomFormfield(
-                        obscureText: true,
-                        name: KString.passwordFormField,
-                        controller: passwordController,
-                        validator: (pass) {
-                          if (pass.toString().length < 6) {
-                            return KString.errorEmptyPassword;
-                          }
-                          if (pass.toString().isEmpty) {
-                            return KString.errorPassword;
-                          }
-                          return null;
+                        ),
+                        const Divider(),
+                        CustomFormfield(
+                            name: KString.emailFormField,
+                            controller: mailController,
+                            validator: (mail) {
+                              if (!GetUtils.isEmail(mail!)) {
+                                return KString.errorEmptyMail;
+                              }
+                              if (mail.toString().isEmpty) {
+                                return KString.errorMail;
+                              }
+                              return null;
+                            },
+                            prefix: const Icon(Icons.mail)),
+                        const Divider(),
+                        CustomFormfield(
+                          obscureText: true,
+                          name: KString.passwordFormField,
+                          controller: passwordController,
+                          validator: (pass) {
+                            if (pass.toString().length < 6) {
+                              return KString.errorEmptyPassword;
+                            }
+                            if (pass.toString().isEmpty) {
+                              return KString.errorPassword;
+                            }
+                            return null;
+                          },
+                          prefix: const Icon(Icons.password),
+                        ),
+                        const Divider(),
+                        CustomFormfield(
+                          name: KString.mobileFormField,
+                          prefix: const Icon(Icons.phone),
+                          controller: phoneController,
+                          validator: (phone) {
+                            if (!GetUtils.isPhoneNumber(phone!)) {
+                              return KString.errorEmptyMail;
+                            }
+                            if (phone.toString().isEmpty) {
+                              return KString.errorFillPhone;
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    children: [
+                      Checkbox(value: true, onChanged: (value) {}),
+                      Text(KString.rememberMe, style: KStyle.title())
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(KString.cAlreadyAccount),
+                      TextButton(
+                        onPressed: () {
+                          // Navigator.popAndPushNamed(context, KRoutesName.login);
+            
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              KRoutesName.login, (Route<dynamic> route) => false);
                         },
-                        prefix: const Icon(Icons.password),
+                        child: Text(KString.login, style: KStyle.title()),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  children: [
-                    Checkbox(value: true, onChanged: (value) {}),
-                    Text(KString.rememberMe, style: KStyle.title())
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(KString.cAlreadyAccount),
-                    TextButton(
-                      onPressed: () {
-                        // Navigator.popAndPushNamed(context, KRoutesName.login);
-
-                        Navigator.pushNamedAndRemoveUntil(context,
-                            KRoutesName.login, (Route<dynamic> route) => false);
-                      },
-                      child: Text(KString.login, style: KStyle.title()),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                ActionButton(
-                  color: kWarnning,
-                  onTap: () {
-                    signUpButtonPressed(context);
-                  },
-                  radius: 5,
-                  child: authController.signUploading.value
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                          color: kWhite,
-                        ))
-                      : Text(KString.registerButton,
-                          style: KStyle.title(color: kWhite)),
-                )
-              ],
+                  const SizedBox(height: 10),
+                  Obx(() => ActionButton(
+                        color: kWarnning,
+                        onTap: () {
+                          signUpButtonPressed(context);
+                        },
+                        radius: 5,
+                        child: authController.signUploading.value
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                color: kWhite,
+                              ))
+                            : Text(KString.registerButton,
+                                style: KStyle.title(color: kWhite)),
+                      ))
+                ],
+              ),
             ),
           ),
         ),
@@ -132,12 +166,15 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
   void signUpButtonPressed(BuildContext context) {
     final mail = mailController.text.trim();
     final pass = passwordController.text.trim();
+    final name = nameController.text.trim();
+    final phone = phoneController.text.trim();
 
-    if (mail.isEmpty || pass.isEmpty) {
+    if (mail.isEmpty || pass.isEmpty || name.isEmpty) {
       KUtils.snackMessage(context, message: 'Fill the field', color: kError);
       return;
     } else {
-      authController.userRegistration(context, mail: mail, pass: pass);
+      authController.userRegistration(context,
+          name: name, mail: mail, pass: pass, phone: phone);
     }
   }
 }

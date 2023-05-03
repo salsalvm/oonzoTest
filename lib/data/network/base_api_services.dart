@@ -1,7 +1,6 @@
 abstract class BaseApiServices {
   //----------whole get methods------//
-  Future<dynamic> getGetApiResponse(
-      {required String url, Map<String, String>? headers});
+  Future<dynamic> getGetApiResponse({required String url});
 
   //----------whole post methods------//
   Future<dynamic> getPostApiResponse(

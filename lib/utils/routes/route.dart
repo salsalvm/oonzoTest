@@ -5,7 +5,6 @@ import 'package:firstcry/view/home/screen_home.dart';
 import 'package:firstcry/view/product/screen_product.dart';
 import 'package:flutter/material.dart';
 
-
 import 'routes_name.dart';
 //This class is a standerd routing in flutter its work on help of getx packages
 //it's a example of push named routing
@@ -39,7 +38,7 @@ class KRoute {
             Animation<double> animation,
             Animation<double> secondaryAnimation,
           ) =>
-               ScreenLogin(),
+              ScreenLogin(),
         );
 
       //---signup screen rout

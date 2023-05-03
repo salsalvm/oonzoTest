@@ -40,98 +40,100 @@ class _ScreenLoginState extends State<ScreenLogin> {
         appBar: const PreferredSize(
             preferredSize: Size.fromHeight(56),
             child: AuthAppBar(title: KString.login)),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(30),
-            child: ListView(
-              children: [
-                const SizedBox(height: 130),
-                Card(
-                  elevation: 10,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        body: GetBuilder<AuthController>(init: AuthController(),
+       builder: (AuthController controller) => SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(30),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 130),
+                  Card(
+                    elevation: 10,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CustomFormfield(
+                          name: KString.emailFormField,
+                          controller: mailController,
+                          validator: (mail) {
+                            if (!GetUtils.isEmail(mail!)) {
+                              return KString.errorMail;
+                            }
+                            if (mail.toString().isEmpty) {
+                              return KString.errorEmptyMail;
+                            }
+                            return null;
+                          },
+                          prefix: const Icon(Icons.mail),
+                        ),
+                        const Divider(),
+                        CustomFormfield(
+                          obscureText: true,
+                          name: KString.passwordFormField,
+                          controller: passwordController,
+                          validator: (pass) {
+                            if (pass.toString().length < 6) {
+                              return KString.errorPassword;
+                            }
+                            if (pass.toString().isEmpty) {
+                              return KString.errorEmptyPassword;
+                            }
+                            return null;
+                          },
+                          prefix: const Icon(Icons.password),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      CustomFormfield(
-                        name: KString.emailFormField,
-                        controller: mailController,
-                        validator: (mail) {
-                          if (!GetUtils.isEmail(mail!)) {
-                            return KString.errorMail;
-                          }
-                          if (mail.toString().isEmpty) {
-                            return KString.errorEmptyMail;
-                          }
-                          return null;
-                        },
-                        prefix: const Icon(Icons.mail),
+                      Checkbox(value: true, onChanged: (value) {}),
+                      Text(KString.rememberMe, style: KStyle.title()),
+                      const SizedBox(
+                        height: 30,
                       ),
-                      const Divider(),
-                      CustomFormfield(
-                        obscureText: true,
-                        name: KString.passwordFormField,
-                        controller: passwordController,
-                        validator: (pass) {
-                          if (pass.toString().length < 6) {
-                            return KString.errorPassword;
-                          }
-                          if (pass.toString().isEmpty) {
-                            return KString.errorEmptyPassword;
-                          }
-                          return null;
+                      Text(KString.forgotPass,
+                          style: KStyle.title(
+                            decoration: TextDecoration.underline,
+                            color: kWarnning,
+                          ))
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(KString.cNoAccount),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              KRoutesName.signup,
+                              (Route<dynamic> route) => false);
                         },
-                        prefix: const Icon(Icons.password),
+                        child: Text(KString.signup, style: KStyle.title()),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Checkbox(value: true, onChanged: (value) {}),
-                    Text(KString.rememberMe, style: KStyle.title()),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Text(KString.forgotPass,
-                        style: KStyle.title(
-                          decoration: TextDecoration.underline,
-                          color: kWarnning,
-                        ))
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(KString.cNoAccount),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            KRoutesName.signup,
-                            (Route<dynamic> route) => false);
-                      },
-                      child: Text(KString.signup, style: KStyle.title()),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30),
-               ActionButton(
-                      color: kWarnning,
-                      radius: 5,
-                      onTap: () {
-                        loginPressed(context);
-                      },
-                      child: authController.loading.value
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                              color: kWhite,
-                            ))
-                          : Text(KString.submit,
-                              style: KStyle.title(color: kWhite)),
-                    )
-              ],
+                  const SizedBox(height: 30),
+                  Obx(() => ActionButton(
+                        color: kWarnning,
+                        radius: 5,
+                        onTap: () {
+                          loginPressed(context);
+                        },
+                        child: authController.loading.value
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                color: kWhite,
+                              ))
+                            : Text(KString.submit,
+                                style: KStyle.title(color: kWhite)),
+                      ))
+                ],
+              ),
             ),
           ),
         ),
@@ -153,5 +155,3 @@ class _ScreenLoginState extends State<ScreenLogin> {
 
   final AuthController authController = Get.put(AuthController());
 }
-
-

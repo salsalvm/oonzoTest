@@ -9,8 +9,9 @@ class HomeRepository {
 
   Future<ProductDatas> fetchHomeDatas() async {
     try {
-      dynamic response = await apiServices.getGetApiResponse(url: AppUrls.product);
-     
+      dynamic response =
+          await apiServices.getGetApiResponse(url: AppUrls.product);
+
       return response = ProductDatas.fromJson(response as Map<String, dynamic>);
     } catch (e) {
       if (kDebugMode) {

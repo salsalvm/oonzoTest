@@ -27,11 +27,13 @@ class ScreenProduct extends StatelessWidget {
                 children: [
                   CarouselBanner(
                       height: 270, img: homeController.product!.value.images!),
-                  Positioned(right: 20,top: 10,
+                  Positioned(
+                      right: 20,
+                      top: 10,
                       child: Text(
-                    '\u{20B9}${homeController.product!.value.price!}',
-                    style: KStyle.heading(color: kWarnning),
-                  ))
+                        '\u{20B9}${homeController.product!.value.price!}',
+                        style: KStyle.heading(color: kWarnning),
+                      ))
                 ],
               ),
               Card(

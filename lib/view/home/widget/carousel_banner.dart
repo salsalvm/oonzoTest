@@ -7,9 +7,10 @@ class CarouselBanner extends StatelessWidget {
     super.key,
     required this.height,
     this.fraction = 1.4,
-    required this.img, this.autoCurveType= Curves.easeIn,
+    required this.img,
+    this.autoCurveType = Curves.easeIn,
   });
-final Curve autoCurveType;
+  final Curve autoCurveType;
   final double height;
   final List<String> img;
   final double fraction;
@@ -21,12 +22,14 @@ final Curve autoCurveType;
       HomeImages.carousel1,
     ];
     return CarouselSlider.builder(
-      itemCount:img.isEmpty?3: img.length,
-      itemBuilder: (BuildContext context, int index, int realIndex) {
+      itemCount: img.isEmpty ? 3 : img.length,
+      itemBuilder: (BuildContext context, int index, _) {
         return FadeInImage.assetNetwork(
-          placeholder: HomeImages.logo,placeholderCacheHeight: 1,placeholderCacheWidth: 1,
+          placeholder: HomeImages.logo,
+          placeholderCacheHeight: 1,
+          placeholderCacheWidth: 1,
           placeholderFit: BoxFit.fill,
-          imageErrorBuilder: (BuildContext context, Object error, _) =>
+          imageErrorBuilder: (BuildContext context, _, __) =>
               Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -36,7 +39,7 @@ final Curve autoCurveType;
           ),
           height: 80,
           alignment: Alignment.center,
-          image: img.isEmpty?'': img[index],
+          image: img.isEmpty ? '' : img[index],
           fit: BoxFit.fill,
         );
         //  Container(

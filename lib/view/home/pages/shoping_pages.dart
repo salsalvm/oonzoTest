@@ -14,7 +14,7 @@ class PageShoping extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-       const FindLocationTile(),
+        const FindLocationTile(),
         Card(
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
           child: Container(
@@ -24,7 +24,7 @@ class PageShoping extends StatelessWidget {
                 image: DecorationImage(image: AssetImage(HomeImages.banner))),
           ),
         ),
-        const CarouselBanner(height: 270,img: []),
+        const CarouselBanner(height: 270, img: []),
         Row(
           children: List.generate(2, (index) {
             List<String> img = <String>[
@@ -65,12 +65,11 @@ class PageShoping extends StatelessWidget {
                 );
               case Status.isComplete:
                 return GridView.builder(
-                  itemCount:  controller.homeDatas.data!.products!.length,
+                  itemCount: controller.homeDatas.data!.products!.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.symmetric(horizontal: 7),
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 5,
                     crossAxisSpacing: 5,
@@ -79,7 +78,8 @@ class PageShoping extends StatelessWidget {
                   itemBuilder: (context, i) {
                     return GestureDetector(
                       onTap: () {
-                        controller.viewProductPage(context, controller.homeDatas.data!.products![i]);
+                        controller.viewProductPage(
+                            context, controller.homeDatas.data!.products![i]);
                       },
                       child: Card(
                         child: Column(
@@ -91,22 +91,25 @@ class PageShoping extends StatelessWidget {
                               child: FadeInImage.assetNetwork(
                                 placeholder: HomeImages.logo,
                                 placeholderFit: BoxFit.fill,
-                                imageErrorBuilder: (BuildContext context,
-                                        Object error, _) =>
-                                    Container(
+                                imageErrorBuilder:
+                                    (BuildContext context, Object error, _) =>
+                                        Container(
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(
                                       image: AssetImage(HomeImages.logo),
                                     ),
                                   ),
-                                ),height: 80,
+                                ),
+                                height: 80,
                                 alignment: Alignment.center,
-                                image:     controller.homeDatas.data!.products![i].thumbnail!,
+                                image: controller
+                                    .homeDatas.data!.products![i].thumbnail!,
                                 fit: BoxFit.fill,
                               ),
-                            ),const SizedBox(height: 5),
-                            Text(    controller.homeDatas.data!.products![i].title!
-                            ,
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              controller.homeDatas.data!.products![i].title!,
                               style: KStyle.content(),
                             )
                           ],

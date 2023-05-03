@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firstcry/res/app_urls.dart';
 import 'package:http/http.dart' as http;
 
 import '../app_exception.dart';
@@ -10,12 +11,13 @@ class NetworkApiService extends BaseApiServices {
   // -----------get Get method--------//
 
   @override
-  Future<void> getGetApiResponse(
-      {required String url, Map<String, String>? headers}) async {
+  Future<void> getGetApiResponse({required String url}) async {
     dynamic responseJson;
     try {
       final http.Response response = await http
-          .get(Uri.parse(url), headers: headers)
+          .get(
+            Uri.parse(url),
+          )
           .timeout(const Duration(seconds: 10));
       responseJson = returnResponse(response);
     } on SocketException {
@@ -32,10 +34,18 @@ class NetworkApiService extends BaseApiServices {
   Future<dynamic> getPostApiResponse(
       {required String url, required dynamic data}) async {
     dynamic responseJson;
+
     try {
       final http.Response response = await http
-          .post(Uri.parse(url), body: data)
-          .timeout(const Duration(seconds: 60));
+          .post(
+            Uri.parse(url),
+            body: data,headers: {}
+          )
+          .timeout(const Duration(seconds: 10));
+      print('$data  $url');
+
+      print('response started${response.body}');
+
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No internet Connection');
@@ -62,9 +72,13 @@ class NetworkApiService extends BaseApiServices {
         throw UnautharisedException('404${response.body}');
       case 504:
         throw InvalidInputException('504${response.body}');
+      case 415:
+        throw InvalidInputException('415${response.body}');
+      case 422:
+        throw InvalidInputException('415${response.body}');
       default:
         throw FetchDataException(
-            'Error occured while communication with server with status code : +----/${response.statusCode}/----+');
+            'Error occured while communication with server + status code : ${response.statusCode}');
     }
   }
 }

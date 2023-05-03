@@ -12,8 +12,7 @@ class AppException implements Exception {
 
 //----------status code default-----------//
 class FetchDataException extends AppException {
-  FetchDataException([String? message])
-      : super(message, 'Error During Communication');
+  FetchDataException([String? message]) : super(message, '');
 }
 
 //----------status code 400-----------//

@@ -32,14 +32,17 @@ class AuthController extends GetxController {
       {required String mail, required String pass}) async {
     if (GetUtils.isEmail(mail) && pass.length > 5) {
       setLoading(true);
-      Map<String, dynamic> data = {'email': mail, 'password': pass};
+      Map<String, dynamic> datas = {'email': mail, 'password': pass};
 
-      authRepo.userLogin(data).then((value) async {
+      authRepo.userLogin(datas).then((value) async {
         setLoading(false);
+        // if (value.status==true) {
+          
+          setLoading(false);
         final SharedPreferences sharedPref =
             await SharedPreferences.getInstance();
         if (kDebugMode) {
-          print(data);
+          print(value);
         }
         sharedPref.setString(logged, 'isTrue');
         sharedPref.get(logged);
@@ -50,6 +53,11 @@ class AuthController extends GetxController {
         indexChangerNavigator.value = 0;
         Navigator.pushNamedAndRemoveUntil(
             context, KRoutesName.home, (Route<dynamic> route) => false);
+        // }else{
+        //     setLoading(false);
+        //       KUtils.snackMessage(context,
+        //     message: 'email or password is incorrect', color: kError);
+        // }
       }).onError(
         (error, stackTrace) {
           setLoading(false);
@@ -68,25 +76,37 @@ class AuthController extends GetxController {
   }
 
   Future<void> userRegistration(BuildContext context,
-      {required String mail, required String pass}) async {
+      {required String name,
+      required String mail,
+      required String pass,
+      required String phone}) async {
     if (GetUtils.isEmail(mail) && pass.length > 5) {
       setSignUploading(true);
-      Map<String, dynamic> data = {'email': mail, 'password': pass};
-
+      Map<String, dynamic> data = {
+        'admin_name': name,
+        'email': mail,
+        'password': pass,
+        'phone_number': phone,
+      };
+      {}
       authRepo.userRegister(data).then((value) async {
         setSignUploading(false);
 
         if (kDebugMode) {
           print(data);
         }
+        final SharedPreferences sharedPref =
+            await SharedPreferences.getInstance();
 
-        KUtils.snackMessage(context,
-            message: 'Registration SuccesFully', color: kSuccess);
+        sharedPref.setString(logged, 'isTrue');
+        sharedPref.get(logged);
 
         //
         indexChangerNavigator.value = 0;
         Navigator.pushNamedAndRemoveUntil(
-            context, KRoutesName.login, (Route<dynamic> route) => false);
+            context, KRoutesName.home, (Route<dynamic> route) => false);
+        KUtils.snackMessage(context,
+            message: 'Registration SuccesFully', color: kSuccess);
       }).onError((error, stackTrace) {
         setSignUploading(false);
 
