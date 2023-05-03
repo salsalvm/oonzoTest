@@ -1,7 +1,6 @@
 import 'package:firstcry/res/colors.dart';
 import 'package:firstcry/res/components/action_button.dart';
 import 'package:firstcry/res/styles.dart';
-import 'package:firstcry/view_model/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

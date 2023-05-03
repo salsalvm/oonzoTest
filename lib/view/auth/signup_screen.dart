@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firstcry/res/colors.dart';
 import 'package:firstcry/res/components/action_button.dart';
 import 'package:firstcry/res/components/custom_form_field.dart';
@@ -5,10 +8,12 @@ import 'package:firstcry/res/strings.dart';
 import 'package:firstcry/res/styles.dart';
 import 'package:firstcry/utils/routes/routes_name.dart';
 import 'package:firstcry/utils/utils.dart';
+import 'package:firstcry/view/auth/splash_screen.dart';
 import 'package:firstcry/view/auth/widget/auth_appbar.dart';
-import 'package:firstcry/view_model/auth_controller.dart';
+import 'package:firstcry/view/home/screen_home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenSignUp extends StatefulWidget {
   const ScreenSignUp({super.key});
@@ -18,11 +23,9 @@ class ScreenSignUp extends StatefulWidget {
 }
 
 class _ScreenSignUpState extends State<ScreenSignUp> {
-  final AuthController authController = Get.find<AuthController>();
   TextEditingController nameController = TextEditingController();
   TextEditingController mailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
   @override
   void dispose() {
     mailController.dispose();
@@ -43,8 +46,7 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(30),
-            child: GetBuilder<AuthController>(init: AuthController(),
-      builder: (AuthController controller) => ListView(
+            child: ListView(
                 children: [
                   const SizedBox(height: 130),
                   Card(
@@ -96,21 +98,6 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
                           },
                           prefix: const Icon(Icons.password),
                         ),
-                        const Divider(),
-                        CustomFormfield(
-                          name: KString.mobileFormField,
-                          prefix: const Icon(Icons.phone),
-                          controller: phoneController,
-                          validator: (phone) {
-                            if (!GetUtils.isPhoneNumber(phone!)) {
-                              return KString.errorEmptyMail;
-                            }
-                            if (phone.toString().isEmpty) {
-                              return KString.errorFillPhone;
-                            }
-                            return null;
-                          },
-                        ),
                       ],
                     ),
                   ),
@@ -131,9 +118,11 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
                       TextButton(
                         onPressed: () {
                           // Navigator.popAndPushNamed(context, KRoutesName.login);
-            
-                          Navigator.pushNamedAndRemoveUntil(context,
-                              KRoutesName.login, (Route<dynamic> route) => false);
+
+                          Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              KRoutesName.login,
+                              (Route<dynamic> route) => false);
                         },
                         child: Text(KString.login, style: KStyle.title()),
                       ),
@@ -146,35 +135,43 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
                           signUpButtonPressed(context);
                         },
                         radius: 5,
-                        child: authController.signUploading.value
-                            ? const Center(
-                                child: CircularProgressIndicator(
-                                color: kWhite,
-                              ))
-                            : Text(KString.registerButton,
+                        child:  Text(KString.registerButton,
                                 style: KStyle.title(color: kWhite)),
                       ))
                 ],
               ),
             ),
           ),
-        ),
       ),
     );
   }
 
-  void signUpButtonPressed(BuildContext context) {
+  void signUpButtonPressed(BuildContext context) async {
     final mail = mailController.text.trim();
     final pass = passwordController.text.trim();
     final name = nameController.text.trim();
-    final phone = phoneController.text.trim();
 
     if (mail.isEmpty || pass.isEmpty || name.isEmpty) {
       KUtils.snackMessage(context, message: 'Fill the field', color: kError);
       return;
     } else {
-      authController.userRegistration(context,
-          name: name, mail: mail, pass: pass, phone: phone);
+    
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: mail, password: pass)
+          .then((value) async {
+        final SharedPreferences sharedPref =
+            await SharedPreferences.getInstance();
+
+        sharedPref.setString(logged, 'isTrue');
+        sharedPref.get(logged);
+
+        //
+        indexChangerNavigator.value = 0;
+        Navigator.pushNamedAndRemoveUntil(
+            context, KRoutesName.home, (Route<dynamic> route) => false);
+        KUtils.snackMessage(context,
+            message: 'Registration SuccesFully', color: kSuccess);
+      });
     }
   }
 }

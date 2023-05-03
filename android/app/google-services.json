@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "771375005678",
+    "project_id": "oonzo-bf8ac",
+    "storage_bucket": "oonzo-bf8ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771375005678:android:d6b7cf41c82c4f9c8518ff",
+        "android_client_info": {
+          "package_name": "com.example.firstcry"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771375005678-bnuc16ffhuilnjshb1les63hkroafius.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdoPli2YPUL8NwlRM23zPQUus8Grs9P9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771375005678-bnuc16ffhuilnjshb1les63hkroafius.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
