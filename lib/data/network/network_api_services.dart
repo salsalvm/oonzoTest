@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:firstcry/res/app_urls.dart';
 import 'package:http/http.dart' as http;
 
 import '../app_exception.dart';
@@ -42,9 +41,7 @@ class NetworkApiService extends BaseApiServices {
             body: data,headers: {}
           )
           .timeout(const Duration(seconds: 10));
-      print('$data  $url');
-
-      print('response started${response.body}');
+    
 
       responseJson = returnResponse(response);
     } on SocketException {

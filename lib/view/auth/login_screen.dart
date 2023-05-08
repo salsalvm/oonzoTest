@@ -166,7 +166,6 @@ class _ScreenLoginState extends State<ScreenLogin> {
         Navigator.pushNamedAndRemoveUntil(
             context, KRoutesName.home, (Route<dynamic> route) => false);
       }).onError((error, stackTrace) {
-        print(error);
         KUtils.snackMessage(context,
             message: 'entered mail and password is incorrect', color: kError);
       });

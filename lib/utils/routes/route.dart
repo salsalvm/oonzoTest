@@ -38,7 +38,7 @@ class KRoute {
             Animation<double> animation,
             Animation<double> secondaryAnimation,
           ) =>
-              ScreenLogin(),
+              const ScreenLogin(),
         );
 
       //---signup screen rout
@@ -49,7 +49,7 @@ class KRoute {
             Animation<double> animation,
             Animation<double> secondaryAnimation,
           ) =>
-              ScreenSignUp(),
+              const ScreenSignUp(),
         );
 
       //---home screen rout

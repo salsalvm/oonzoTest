@@ -174,7 +174,6 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
         KUtils.snackMessage(context,
             message: 'Registration SuccesFully', color: kSuccess);
       }).onError((error, _) {
-        print(error);
         KUtils.snackMessage(context,
             message: 'user already exist', color: kError);
       });
